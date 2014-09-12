@@ -142,3 +142,27 @@ The `Pseudo Top Level Domain` (aka `Pseudo-TLD`) is always ``c2c``.  (**Note:** 
 
 #. It is not a valid `DNS` top-level domain, and also cannot be registered as one in the future, and
 #. It therefore can distinguish domain names between `c2c addresses` and standard `DNS` domains (or other non-standard domains, such as the Tor Pseudo-TLD ``.onion``).
+
+Verification Group
+~~~~~~~~~~~~~~~~~~
+
+The verification group is the lynchpin of the `c2c address` scheme and critical to its security properties.  The top-most field in this group (thus always the second-level address field) specifies the `c2c Verification` method and the other fields in this group provide sufficient assertion parameters for the given verification method.
+
+Verification Method Field
+.........................
+
+In this spec revision, the only verification method is `c2c verification direct` which is represented by the constant ``a``.  Thus, as of this revision, every ``c2c address`` must end with `.a.c2c`.
+
+For direct verification, the field group always has this form:
+
+    «hash assertion field» ".a"
+
+The `hash assertion field` consists of a `hash method indicator` prefix followed by an encoded `hash assertion`.  As of this revision the only `hash method indicator` is the constant ``'a'`` and the semantics are defined as follows:
+
+**Hash Method 'a' - Encoding:** Compute the ``SHA256`` of the server's TLS certificate bitstring as it will be presented during a `TLS` handshake, then truncate the result to the leftmost 16 bytes, and encode this using `zbase32`.  (**FIXME:** fully specify `zbase32`.  For now the specification is "just like the python `zbase32` library has done it in the past most stable release.)
+
+An example verification group is::
+
+    ahqaceowa9oqbjgz56urj1573ro.a
+
+Note that the initial ``a`` provides versioning on the hashing scheme, and the final ``a`` provides versioning on the verification method.
