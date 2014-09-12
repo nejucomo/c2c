@@ -208,8 +208,9 @@ Address Properties
 
 The specification of `c2c addresses` is intended to explicitly preserve these properties:
 
-#. They are syntactically valid `DNS` domain names.
-#. They will never be valid extant `DNS` domain names.
+#. It is infeasible for a remote entity to pass a `c2c verification` check for a given address without controlling the identified certificate's private key.
+#. Addresses are syntactically valid `DNS` domain names.
+#. They will never be valid extant `DNS` domain names (ie: `DNS` will never successfully resolve them.)
 #. They can be distinguished from all other domain names precisely by matching the last four characters to ``.c2c``.
 #. When they are used in the URL of a browser context (which can resolve and verify them), the layout of `c2c addresses` "works well" with the browser same origin policy:
 
