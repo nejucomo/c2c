@@ -166,3 +166,39 @@ An example verification group is::
     ahqaceowa9oqbjgz56urj1573ro.a
 
 Note that the initial ``a`` provides versioning on the hashing scheme, and the final ``a`` provides versioning on the verification method.
+
+Resolution Group
+~~~~~~~~~~~~~~~~
+
+The resolution group is optional and supplies information for clients to resolve a `c2c address` to an IP address.  As in the verification group, the topmost field in this group is a `resolution method field` and the remaining fields are interpreted according to this method as parameters to some resolution system.
+
+Absent Resolution
+.................
+
+Without a resolution group present, clients are left to their own devices to discover the IP address for the given certificate.  This may be acceptable, for example, in a tightly knit network application where resolution is already well specified by context and the benefit to shorter addresses is preferable.  In a more general context, widely deployed clients may use a common default resolution system, which if ubiquitous would allow shorter addresses to widely propagate.
+
+Direct IP Resolution
+....................
+
+The direct IP resolution mechanism is specified by a `resolution method field` of ``a`` and encodes an IP address into the `c2c address`.  Clients resolve the `c2c address` to an IP address merely by decoding this field.  There is no networking or client-state involved in direct resolution.
+
+There is always exactly one sub-field for this resolution method which consists of a prefix to specify the IP encoding followed by the encoded IP address:
+
+**Compact Direct IP Encoding:** The prefix ``a`` is followed by the `zbase32` encoding of the raw IP bits.  Both `IPv4` and `IPv6` addresses may be encoded and are distinguished by their length.  (**Note:** This encoding may be larger than a transparent IPv6 encoding which uses some of the standard IPv6 ASCII encoding compressions.)
+
+**Transparent IPv4 Encoding:** The prefix ``ipv4-`` is followed by the dotted-quad representation of the IPv4 address except each ``.`` is replaced with ``-``.  (**FIXME:** Does reverse DNS already specify the kind of encoding we want here?)
+
+**Transparent IPv6 Encoding:** **FIXME:** Todo.
+
+DNS Resolution
+..............
+
+`c2c` can combine its alternative verification method with `DNS` resolution to support existing infrastructure and reduce "address brittleness".  In this case the `resolution method field` is ``dns``.
+
+Unlike all formerly specified field groups, this field group is unique in that the number of sub-fields is not fixed.  All subfields beyond the ``dns`` `resolution method field` compose a legitimate DNS entry.  To resolve such addresses, clients construct a new domain from these subfields and then use standard DNS for IP resolution.
+
+Example::
+
+    example.com.dns.ahqaceowa9oqbjgz56urj1573ro.a.c2c
+
+Clients would resolve this ``dns`` resolution method `c2c` address by constructing a domain from all fields left of ``dns`` to derive ``example.com``, and then use `DNS` to resolve an IP address.  After connecting to this IP address, `c2c direct verification` ensures the encoded hash of the servers certificate matches ``hqaceowa9oqbjgz56urj1573ro``.
