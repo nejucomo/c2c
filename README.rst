@@ -19,11 +19,11 @@ Overview
 Summary
 -------
 
-`c2c` clients refer to TLS servers by their certificate's hash using an exceptional pseudo-TLD ``.c2c``.  These pseudo-domains are called `c2c addresses`.  An example c2c address: ``ahqaceowa9oqbjgz56urj1573ro.c2c``
+`c2c` clients refer to TLS servers by their certificate's hash using an exceptional pseudo-TLD ``.c2c``.  These pseudo-domains are called `c2c addresses`.  An example c2c address: ``ahqaceowa9oqbjgz56urj1573ro.a.c2c``
 
 When given such a reference to initiate a connection, TLS verification of the server certificate, they require the server-presented certificate to hash to the given pseudo-domain.
 
-Because the pseudo-domain is not a valid `DNS` name, alternative resolution approaches are possible, the simplest being `immediate resolution` where the pseudo-domains encode IP addresses as well as certificate fingerprints, such as: ``224.154.80.208.ip4.ahqaceowa9oqbjgz56urj1573ro.c2c``
+Because the pseudo-domain is not a valid `DNS` name, alternative resolution approaches are possible, the simplest being `immediate resolution` where the pseudo-domains encode IP addresses as well as certificate fingerprints, such as: ``224.154.80.208.ip4.ahqaceowa9oqbjgz56urj1573ro.a.c2c``
 
 Use Cases
 ---------
@@ -110,3 +110,35 @@ Process
 The hash of the `TLS candidate certificate` bitstring is computed according to the `hash algorithm specifier` to produce a `candidate hash`.  If the `candidate hash` is bitwise identical to the `asserted certificate hash`, then verification succeeds.  Otherwise verification fails.
 
 **Implementation Note:** A cautious implementation should strive to avoid timing attacks, such as by doing a constant-time comparison of the `candidate` and `asserted` hashes.  (**FIXME:** we need a security model; the assumption here is that remote entities should not know which `c2c address` the client uses from this verification process as a privacy protection.)
+
+c2c Addresses
+-------------
+
+A `c2c address` must match the constrains placed on domain names as per `DNS`.  (**FIXME:** Refer to a specific reference standard.)  The following conditional constraints and semantics apply:
+
+The domain parts (**FIXME:** use `DNS` terminology) are called `address fields`.  The constraints and semantics of a field depend on its content, as well as address fields to its right (ie: parent pseudo-domains), but *exclude* fields to the left (ie: child pseudo-domains).  Additionally, for a given parent pseudo-domain the `field index` (defined by the number of ``.`` characters to the right of a given field) determines the semantic intepretation unambiguously.
+
+There are three ``field groups`` presented in the same order, one being optional, so that every domain follows this high level syntax::
+
+    [ «resolution group» '.' ] «verification group» '.' «pseudo top level domain»
+
+Examples
+~~~~~~~~
+
+An example without a `resolution group` is::
+
+    ahqaceowa9oqbjgz56urj1573ro.a.c2c
+
+An example with a `resolution group` is::
+
+    224.154.80.208.ip4.ahqaceowa9oqbjgz56urj1573ro.a.c2c
+
+In the latter example, the `resolution group` is the five fields ``224.154.80.208.ip4``, the `verification group` is the two fields ``ahqaceowa9oqbjgz56urj1573ro.a``, and the `pseudo-TLD` is ``c2c``.
+
+Pseudo Top Level Domain
+~~~~~~~~~~~~~~~~~~~~~~~
+
+The `Pseudo Top Level Domain` (aka `Pseudo-TLD`) is always ``c2c``.  (**Note:** This is provisional until we research `gtld` registrations to determine a `Pseudo-TLD` which cannot collide with legitimate `DNS` addresses.)  This specified constant serves two purposes:
+
+#. It is not a valid `DNS` top-level domain, and also cannot be registered as one in the future, and
+#. It therefore can distinguish domain names between `c2c addresses` and standard `DNS` domains (or other non-standard domains, such as the Tor Pseudo-TLD ``.onion``).
