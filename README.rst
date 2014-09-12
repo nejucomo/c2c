@@ -202,3 +202,18 @@ Example::
     example.com.dns.ahqaceowa9oqbjgz56urj1573ro.a.c2c
 
 Clients would resolve this ``dns`` resolution method `c2c` address by constructing a domain from all fields left of ``dns`` to derive ``example.com``, and then use `DNS` to resolve an IP address.  After connecting to this IP address, `c2c direct verification` ensures the encoded hash of the servers certificate matches ``hqaceowa9oqbjgz56urj1573ro``.
+
+Address Properties
+~~~~~~~~~~~~~~~~~~
+
+The specification of `c2c addresses` is intended to explicitly preserve these properties:
+
+#. They are syntactically valid `DNS` domain names.
+#. They will never be valid extant `DNS` domain names.
+#. They can be distinguished from all other domain names precisely by matching the last four characters to ``.c2c``.
+#. When they are used in the URL of a browser context (which can resolve and verify them), the layout of `c2c addresses` "works well" with the browser same origin policy:
+
+    * The SOP restrictions of `javascript` are ultimately determined by the certificate.  (**FIXME:** What if Javascript opts into the second level domain which lacks a `hash assertion field`?)
+    * The SOP restrictions of `javascript` can be further refined by resolution method.  (**FIXME:** Is this a feature?)
+    * JavaScript contexts for a the same website which has been accessed with *both* `c2c` and a standard TLS+PKI https URLs will be isolated from each other by the SOP.
+
