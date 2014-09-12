@@ -218,3 +218,23 @@ The specification of `c2c addresses` is intended to explicitly preserve these pr
     * The SOP restrictions of `javascript` can be further refined by resolution method.  (**FIXME:** Is this a feature?)
     * JavaScript contexts for a the same website which has been accessed with *both* `c2c` and a standard TLS+PKI https URLs will be isolated from each other by the SOP.
 
+Implementation
+==============
+
+The current specification is developing in tandem with a prototypical reference implementation.  This is a set of python libraries implementing the three layers.  Additionally there are some programs to facilitate deploying prototypical `c2c` today.
+
+Libraries
+---------
+
+This repository contains separate python packages:
+
+``c2c-verifier`` implements the verification layer for use by `pyOpenSSL` applications.  Note that this library is agnostic about `c2c addresses` and could be used in systems which do not rely on `c2c addresses`.
+
+``c2c-address`` is an address parsing library which is I/O and verification agnostic.
+
+``txc2c`` is a client library built on top of `twisted` and the above two libraries to provide resolution, connection, and verification of `c2c addresses`.
+
+``c2ctool`` is a set of commandline tools:
+
+* A "sniffer" connects to a TLS server and generates an associated `c2c address`.
+* A `SOCKS` proxy allows many TCP client applications to use `c2c addresses` without code changes.
