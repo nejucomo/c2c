@@ -42,7 +42,8 @@ class VirtualEnvCommandBase (Command):
         join = os.path.join
 
         self.basedir = os.path.dirname(os.path.abspath(__file__))
-        self.pymod = join(self.basedir, PACKAGENAME)
+        self.importname = PACKAGENAME.replace('-', '_')
+        self.pymod = join(self.basedir, self.importname)
         self.testdir = join(self.basedir, 'build', 'test')
         self.venvdir = join(self.testdir, 'venv')
 
@@ -98,7 +99,7 @@ class TestWithCoverageAndTrialInAVirtualEnvCommand (VirtualEnvCommandBase):
     def run_within_virtualenv(self):
         self._update_python_path()
         try:
-            run(self.coverage, 'run', '--branch', '--source', self.pymod, self.trial, PACKAGENAME)
+            run(self.coverage, 'run', '--branch', '--source', self.pymod, self.trial, self.importname)
         finally:
             run(self.coverage, 'html')
 
