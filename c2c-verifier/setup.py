@@ -6,7 +6,7 @@ from setuptools import setup, find_packages, Command
 
 PACKAGENAME = 'c2c-verifier'
 INSTALL_REQUIRES = [
-    #'mock >= 1.0.1',
+    'zbase32 >= 1.1.5',
     ]
 
 
