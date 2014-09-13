@@ -1,7 +1,9 @@
 import hashlib
 import unittest
 
-from c2c_verifier.codec import decode_a, encode_a
+from OpenSSL.crypto import X509
+
+from c2c_verifier.codec import get_certificate_hash_encoding_a, decode_a, encode_a
 
 
 class encode_a_tests (unittest.TestCase):
@@ -30,3 +32,13 @@ class decode_a_tests (unittest.TestCase):
         expected = hashlib.sha256('test input').digest()[:16]
 
         self.assertEqual(expected, actual)
+
+
+class get_certificate_hash_encoding_a_tests (unittest.TestCase):
+
+    def test_empty_x509_hash(self):
+        cert = X509()
+        expected = 'akbwpji3nw8kq7wxe98ubxaigmo'
+
+        self.assertEqual(expected, get_certificate_hash_encoding_a(cert))
+
