@@ -6,6 +6,7 @@ from setuptools import setup, find_packages, Command
 
 PACKAGENAME = 'c2c-verifier'
 INSTALL_REQUIRES = [
+    'pyOpenSSL >= 0.14',
     'zbase32 >= 1.1.5',
     ]
 
