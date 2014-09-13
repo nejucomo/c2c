@@ -38,7 +38,7 @@ class get_certificate_hash_encoding_a_tests (unittest.TestCase):
 
     def test_empty_x509_hash(self):
         cert = X509()
-        expected = 'akbwpji3nw8kq7wxe98ubxaigmo'
+        expected = 'ajwehjgcua5ak6ykeqe8zhrysqo'
 
         self.assertEqual(expected, get_certificate_hash_encoding_a(cert))
 

@@ -8,3 +8,7 @@ def decode_a(encstr):
 
 def encode_a(bits):
     return 'a' + zbase32.b2a(bits)
+
+
+def get_certificate_hash_encoding_a(cert):
+    return encode_a(cert.digest('sha256').replace(':', '').decode('hex')[16:])
