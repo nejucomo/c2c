@@ -25,7 +25,6 @@ def main(args = sys.argv[1:]):
 
         cmdclass={
             'test': TestWithCoverageAndTrialInAVirtualEnvCommand,
-            'test_integration': TestIntegrationCommand,
             },
         )
 
@@ -93,6 +92,7 @@ class TestWithCoverageAndTrialInAVirtualEnvCommand (VirtualEnvCommandBase):
     # Internal settings:
     TestToolRequirements = [
         'coverage == 3.7.1',
+        'twisted >= 14.0',
         ]
 
     def run_within_virtualenv(self):
@@ -107,22 +107,6 @@ class TestWithCoverageAndTrialInAVirtualEnvCommand (VirtualEnvCommandBase):
             os.environ['PYTHONPATH'] = '{0}:{1}'.format(self.basedir, os.environ['PYTHONPATH'])
         else:
             os.environ['PYTHONPATH'] = self.basedir
-
-
-class TestIntegrationCommand (VirtualEnvCommandBase):
-    """Run live git with an installed git-remote-lafs on the commandline against a lafs-giab configuration."""
-
-    description = __doc__
-
-    def run_within_virtualenv(self):
-        url = 'lafs::foo-not-yet-implemented'
-
-        run(self.pip, 'uninstall', '--yes', 'git-remote-lafs')
-        run(self.pip, 'install', self.basedir)
-
-        os.environ['PATH'] = '{0}:{1}'.format(self.bindir, os.environ['PATH'])
-
-        run('git', 'push', url, url)
 
 
 def run(*args):
