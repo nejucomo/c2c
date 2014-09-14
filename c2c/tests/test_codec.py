@@ -3,7 +3,7 @@ import unittest
 
 from OpenSSL.crypto import X509
 
-from c2c_verifier.codec import get_certificate_hash_encoding_a, decode_a, encode_a
+from c2c.codec import get_certificate_hash_encoding_a, decode_a, encode_a
 
 
 class encode_a_tests (unittest.TestCase):

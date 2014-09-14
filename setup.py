@@ -4,7 +4,7 @@ import os, sys, subprocess
 from setuptools import setup, find_packages, Command
 
 
-PACKAGENAME = 'c2c-verifier'
+PACKAGENAME = 'c2c'
 INSTALL_REQUIRES = [
     'pyOpenSSL >= 0.14',
     'zbase32 >= 1.1.5',
@@ -14,7 +14,7 @@ INSTALL_REQUIRES = [
 def main(args = sys.argv[1:]):
     setup(
         name=PACKAGENAME,
-        description='c2c verifier - Connect to Certificate verification callback for pyOpenSSL.',
+        description='c2c aka connect to certificate reference implementation.',
         url='https://github.com/nejucomo/c2c',
         license='GPLv3',
         version='0.1.dev0',
@@ -43,8 +43,7 @@ class VirtualEnvCommandBase (Command):
         join = os.path.join
 
         self.basedir = os.path.dirname(os.path.abspath(__file__))
-        self.importname = PACKAGENAME.replace('-', '_')
-        self.pymod = join(self.basedir, self.importname)
+        self.pymod = join(self.basedir, PACKAGENAME)
         self.testdir = join(self.basedir, 'build', 'test')
         self.venvdir = join(self.testdir, 'venv')
 
@@ -100,7 +99,7 @@ class TestWithCoverageAndTrialInAVirtualEnvCommand (VirtualEnvCommandBase):
     def run_within_virtualenv(self):
         self._update_python_path()
         try:
-            run(self.coverage, 'run', '--branch', '--source', self.pymod, self.trial, self.importname)
+            run(self.coverage, 'run', '--branch', '--source', self.pymod, self.trial, PACKAGENAME)
         finally:
             run(self.coverage, 'html')
 
