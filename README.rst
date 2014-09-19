@@ -76,6 +76,8 @@ Additionally, it requires client-modifications or proxies to be useful, so use c
 Specification
 =============
 
+.. caution:: Everything here is provisional and there are unresolved major decisions such as what verification actually means (ie: hash of complete chain?  Leaf-node pubkey hash?).  This "specification" currently exists just to give some details to chew on.
+
 `c2c` is composed of three layers of specification:
 
 #. `c2c verification` - the algorithm and it's requisite parameters for verifying a certificate.
